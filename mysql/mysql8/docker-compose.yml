@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.4.5
+    container_name: mysql
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      # root 密码
+      MYSQL_ROOT_PASSWORD: 12345678
+    ports:
+      - "13306:3306"
+    volumes:
+      # 数据挂载
+      - ./data/mysql/data/:/var/lib/mysql/
+      # 配置挂载
+      - ./data/mysql/conf/:/etc/mysql/conf.d/
+      - ./data/mysql/logs/:/var/log/mysql/
+      # 自动执行此目录下的 SQL 文件
+      - ./data/mysql/sql/:/docker-entrypoint-initdb.d
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    privileged: true
+    network_mode: "host"

@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  mysql:
+    # 使用官方 MySQL 5.7.44 镜像
+    image: mysql:5.7.44
+    
+    # 容器名称
+    container_name: mysql-5.7
+    # 自动重启策略
+    restart: unless-stopped
+    # 端口映射（主机:容器）
+    ports:
+      - "13306:3306"
+    # 数据卷挂载配置
+    volumes:
+      # 主数据目录（存放数据库文件）
+      - ./data/mysql/data:/var/lib/mysql
+      # 配置文件目录（可放置自定义 my.cnf）
+      - ./data/mysql/conf:/etc/mysql/conf.d
+      # 日志目录（错误日志、慢查询日志等）
+      - ./data/mysql/logs:/var/log/mysql
+      # 初始化 SQL 脚本目录（容器启动时执行）
+      - ./data/mysql/init-scripts:/docker-entrypoint-initdb.d
+    
+    # 环境变量配置
+    environment:
+      # 必须：root 用户密码
+      MYSQL_ROOT_PASSWORD: 12345678
+      # 可选：创建默认数据库
+      # MYSQL_DATABASE: your_database
+      # 可选：创建普通用户
+      # MYSQL_USER: your_user
+      # MYSQL_PASSWORD: your_password
+
+      # 时区设置（Asia/Shanghai 或 UTC 等）
+      TZ: Asia/Shanghai
+    
+    # MySQL 服务器启动参数
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+8:00
+      - --slow-query-log=1
+      - --slow-query-log-file=/var/log/mysql/mysql-slow.log
+      - --log-error=/var/log/mysql/mysql-error.log
+      # 大小写不敏感
+      - --lower_case_table_names=1
