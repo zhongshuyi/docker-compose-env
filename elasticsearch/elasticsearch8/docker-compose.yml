@@ -1,0 +1,39 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:8.8.1
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elasticsearch
+    environment:
+      # 设置集群名称
+      cluster.name: elasticsearch
+      # 以单一节点模式启动
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - ./data/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+      - ./data/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./data/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - ./data/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  kibana:
+    image: kibana:8.8.1
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - elasticsearch
+    depends_on:
+      # kibana 在 elasticsearch 启动之后再启动
+      - elasticsearch
+    environment:
+      #设置系统语言文中文
+      I18N_LOCALE: zh-CN
+    volumes:
+      - ./data/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+networks:
+  elasticsearch:
+    driver: bridge
