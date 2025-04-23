@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  rabbitmq:
+    # RabbitMQ 官方镜像标签
+    image: rabbitmq:4.1.0-management
+
+    # 容器命名与重启策略
+    container_name: rabbitmq
+    restart: always
+
+    # 端口映射配置
+    ports:
+      # AMQP 协议端口
+      - "5672:5672"
+      # Web 管理界面端口
+      - "15672:15672"
+
+    # 环境变量配置
+    environment:
+      # 管理员账号
+      RABBITMQ_DEFAULT_USER: admin
+      # 管理员密码
+      RABBITMQ_DEFAULT_PASS: admin@123
+      # 时区配置（可选）
+      TZ: Asia/Shanghai
+
+    # 数据卷挂载配置
+    volumes:
+      # 数据持久化目录
+      - ./data/rabbitmq/data:/var/lib/rabbitmq
+      # 日志目录
+      - ./data/rabbitmq/logs:/var/log/rabbitmq
+      # 配置文件目录（按需启用）
+      # - ./data/rabbitmq/conf:/etc/rabbitmq
