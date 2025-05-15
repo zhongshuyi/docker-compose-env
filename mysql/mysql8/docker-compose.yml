@@ -24,5 +24,3 @@ services:
       --collation-server=utf8mb4_general_ci
       --explicit_defaults_for_timestamp=true
       --lower_case_table_names=1
-    privileged: true
-    network_mode: "host"
