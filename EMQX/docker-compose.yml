@@ -11,6 +11,9 @@ services:
       - "8084:8084"
       - "8883:8883"
       - "18083:18083"
+    # 关键配置：添加主机名解析
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./data/emqx/data:/opt/emqx/data
       - ./data/emqx/log:/opt/emqx/log
