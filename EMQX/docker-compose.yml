@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  emqx-enterprise:
+    image: emqx/emqx-enterprise:5.10.0
+    container_name: emqx-enterprise
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "8084:8084"
+      - "8883:8883"
+      - "18083:18083"
+    volumes:
+      - ./data/emqx/data:/opt/emqx/data
+      - ./data/emqx/log:/opt/emqx/log
+      # - ./data/emqx/etc:/opt/emqx/etc
