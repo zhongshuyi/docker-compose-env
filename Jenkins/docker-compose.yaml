@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  jenkins-blueocean:
+    image: jenkins/jenkins:2.515-jdk21
+    container_name: jenkins-blueocean
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./data/jenkins/jenkins_home:/var/jenkins_home
+      - ./data/jenkins/logs:/var/log/jenkins
+      - ./data/jenkins/workspace:/home/jenkins/workspace
+      - ./data/jenkins/cache:/tmp/jenkins/cache
+      - ./data/jenkins/backups:/var/backups/jenkins
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    restart: unless-stopped
