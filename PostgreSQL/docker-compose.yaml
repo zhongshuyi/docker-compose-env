@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17.5
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: nCpkpC1B47DY
+      POSTGRES_DB: app_database      # 替换为你的数据库名
+      TZ: Asia/Shanghai              # 设置时区（可选）
+    volumes:
+      - ./data/postgresql/data:/var/lib/postgresql/data
+      - ./data/postgresql/backups:/backups
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
