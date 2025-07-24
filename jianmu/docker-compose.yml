@@ -1,9 +1,11 @@
-version: '3'
 services:
   jianmu-mysql:
     image: docker.jianmuhub.com/library/mysql:8.0.31
     command: --init-connect='SET NAMES utf8' --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1200 --max-user-connections=1000
     restart: always
+    # 关键配置：添加主机名解析
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: "jianmu"
@@ -22,6 +24,9 @@ services:
       JIANMU_API_ADMINPASSWD: 123456
 #      REGISTRY_AK:
 #      REGISTRY_SK:
+    # 关键配置：添加主机名解析
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./jianmu/data:/home/jianmu/data
     depends_on:
@@ -34,8 +39,11 @@ services:
       JIANMU_SRV_ADDRESS: http://ci-server:8081
       JIANMU_SRV_SECRET: worker-secret
       JIANMU_WORKER_ID: worker1
-      # 可同时并发的容器数量，默认为2
+      # 可同时并发的容器数量，默认为 2
       JIANMU_WORKER_CAPACITY: 5
+    # 关键配置：添加主机名解析
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
@@ -50,7 +58,9 @@ services:
     depends_on:
       - jianmu-mysql
       - ci-server
-
+    # 关键配置：添加主机名解析
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 networks:
   default:
     ipam:
